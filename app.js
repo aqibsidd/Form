@@ -9,14 +9,8 @@ app.set('view engine','ejs')
 app.engine('ejs', require('ejs').__express);
 
 const urlencoderParse = bodyParser.urlencoded({extended: false})
-
-app.get('/', (req, res) => {
-  res.render('index')
-})
-app.get('/register', (req, res) => {
-    res.render('register')
-})
-app.post('/register', urlencoderParse,[
+app.use(urlencoderParse);
+let formValidation=[
     check('username','This username must be 4+ character long')
         .exists()
         .isLength({min: 4}),
@@ -24,20 +18,31 @@ app.post('/register', urlencoderParse,[
         .isEmail()
         .normalizeEmail(),
     check('password','password must 8 character')
-        .isStrongPassword()
-        .isLength({min: 8})
+        .isLength({min: 8}) 
+]
+app.get('/', (req, res) => {
+  res.render('index')
+})
 
-
-], (req, res) => {
+app.get('/register', (req, res) => {
+    res.render('register')
+})
+let mydata=[];
+app.post('/register',formValidation,(req, res) => {
+    console.log(req.body);
     const error = validationResult(req)
-    if(!error.isEmpty()){
-        //return res.status(422).jsonp(error.array())
+    console.log(error);
+    if(!error.isEmpty()){ 
         const alert = error.array()
         res.render('register',{
             alert
         })
-    }
-    res.json(req.body)
+    }else{
+        mydata.push(req.body);
+        res.render('register',{
+            data:mydata
+        })
+    }      
 })
-app.listen(port, () => console.info('App is listenin on port: ${port}'))
-console.log("Aqib")
+app.listen(port, () => console.info(`App is listenin on port: ${port}`));
+ 

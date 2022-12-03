@@ -21,6 +21,26 @@
                 </div>    
             <%}) %>
         <%} %>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(typeof data !='undefined' && data.length>0){%>
+                    <% data.forEach(function(error){%>
+                        <tr>
+                            <td> <%= error.username %></td>
+                            <td> <%= error.email %></td>
+                            <td> <%= error.password %></td>
+                        </tr>
+                    <%}) %>
+                <%} %>
+            </tbody>
+        </table>
 
         <form action="register" method="POST">
             
