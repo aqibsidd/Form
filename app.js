@@ -44,5 +44,6 @@ app.post('/register',formValidation,(req, res) => {
         })
     }      
 })
+console.log("")
 app.listen(port, () => console.info(`App is listenin on port: ${port}`));
  
